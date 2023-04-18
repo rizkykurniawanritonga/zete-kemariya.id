@@ -8,19 +8,19 @@ use App\Jobs\MakeMessageLog;
 use App\Models\MessageLog;
 use App\Models\Device;
 
-class ChatController extends Controller
+class ChatsController extends Controller
 {
     public $base_url;
 
     public function __construct()
     {
-       $this->base_url = config('app.wa_api_url');
+        $this->base_url = config('app.wa_api_url');
     }
 
     // chats
     public function send(Request $request)
     {
-        if(!auth()->user()){
+        if (!auth()->user()) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized',
@@ -32,7 +32,7 @@ class ChatController extends Controller
         $message = $request->message;
 
         // check if phone number start with 0, and replace with 62
-        if(substr($phone, 0, 1) == '0'){
+        if (substr($phone, 0, 1) == '0') {
             $phone = '62' . substr($phone, 1);
         }
         $curl = curl_init();
@@ -59,13 +59,13 @@ class ChatController extends Controller
         curl_close($curl);
         $result = json_decode($result);
 
-        if($result->success == true){
+        if ($result->success == true) {
             $status = 200;
-        }else{
+        } else {
             $status = 500;
         }
         // check if use_job_queue true
-        if(config('app.use_job_queue')){
+        if (config('app.use_job_queue')) {
             MakeMessageLog::dispatch($device_id, $phone, $message, $status);
         } else {
             // search device
@@ -84,7 +84,7 @@ class ChatController extends Controller
 
     public function list(Request $request)
     {
-        if(!auth()->user()){
+        if (!auth()->user()) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized',
@@ -112,9 +112,9 @@ class ChatController extends Controller
         curl_close($curl);
         $result = json_decode($result);
 
-        if($result->success == true){
+        if ($result->success == true) {
             $status = 200;
-        }else{
+        } else {
             $status = 500;
         }
         return response()->json($result);

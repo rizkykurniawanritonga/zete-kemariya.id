@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\SessionController;
-use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\ChatsController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('session')->group(function () {
@@ -14,7 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('chats')->group(function () {
-        Route::post('/', [ChatController::class, 'list']);
-        Route::post('send', [ChatController::class, 'send']);
+        Route::post('/', [ChatsController::class, 'list']);
+        Route::post('send', [ChatsController::class, 'send']);
     });
 });
